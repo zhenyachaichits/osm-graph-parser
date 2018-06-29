@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+bootJar {
+    baseName = 'osm-graph-parser'
+    version =  '0.1'
+}
+
+group 'com.epam.coder'
+version '0.1'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('com.google.maps:google-maps-services:0.2.8')
+    compile('javax.xml.bind:jaxb-api:2.3.0')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
