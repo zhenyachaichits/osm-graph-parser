@@ -16,6 +16,10 @@ public class MapGraph {
         this.graph = new HashMap<>();
     }
 
+    public MapGraph(Map<Long, Node> graph) {
+        this.graph = graph;
+    }
+
     public void addNode(Node node) {
         graph.put(node.getId(), node);
     }
@@ -25,7 +29,10 @@ public class MapGraph {
         Node endNode = graph.get(endPointId);
 
         if (startNode != null && endNode != null) {
-            long distance = 0; // GoogleMapsUtils.measureDistance(new LatLng(startNode.getLatitude(), startNode.getLongitude()),new LatLng(endNode.getLatitude(), endNode.getLongitude()));
+            long leftLimit = 1L;
+            long rightLimit = 10L;
+            long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
+            long distance = generatedLong;//GoogleMapsUtils.measureDistance(new LatLng(startNode.getLatitude(), startNode.getLongitude()),new LatLng(endNode.getLatitude(), endNode.getLongitude()));
 
             startNode.getEdges().add(new Edge(startPointId, endPointId, distance, tags));
         }
