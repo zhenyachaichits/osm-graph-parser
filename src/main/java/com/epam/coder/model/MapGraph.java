@@ -3,6 +3,8 @@ package com.epam.coder.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Math.*;
+
 public class MapGraph {
 
     /*
@@ -31,10 +33,14 @@ public class MapGraph {
         if (startNode != null && endNode != null) {
             long leftLimit = 1L;
             long rightLimit = 10L;
-            long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-            long distance = generatedLong;//GoogleMapsUtils.measureDistance(new LatLng(startNode.getLatitude(), startNode.getLongitude()),new LatLng(endNode.getLatitude(), endNode.getLongitude()));
-
-            startNode.getEdges().add(new Edge(startPointId, endPointId, distance, tags));
+            double dis = 6371000 * acos(
+                    sin(startNode.getLatitude() * PI / 180) * sin(endNode.getLatitude() * PI / 180) +
+                    cos(startNode.getLatitude() * PI / 180) * cos(endNode.getLatitude() * PI / 180) *
+                            cos(startNode.getLongitude() * PI / 180 - endNode.getLongitude() * PI / 180  )
+            );
+            //long distance = GoogleMapsUtils.measureDistance(new LatLng(startNode.getLatitude(), startNode.getLongitude()),new LatLng(endNode.getLatitude(), endNode.getLongitude()));
+            //System.out.println("dis - " + dis + " Google dis - " + distance + " dif - " + abs(dis - distance));
+            startNode.getEdges().add(new Edge(startPointId, endPointId, round(dis), tags));
         }
     }
 

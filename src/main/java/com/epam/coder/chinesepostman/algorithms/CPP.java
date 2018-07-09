@@ -27,11 +27,11 @@ public abstract class CPP {
             
             line++;
             if (line == 10) {
-                System.out.println("");
+                System.out.println();
                 line = 0;
             }
         }
-        System.out.println("\ncusto do caminho: " + sg.calculateWayCost(output));
+        System.out.println("Way cost" + sg.calculateWayCost(output));
     }
 
 }

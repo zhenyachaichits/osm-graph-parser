@@ -53,7 +53,7 @@ public class Greedy extends CPP {
                 sg.invalidate(String.valueOf(edgeMax.getStartPointId()), String.valueOf(edgeMax.getEndPointId()));
                 key = String.valueOf(edgeMax.getEndPointId());
             } else if (!isObjective(key)) {
-                sg.startKey = key;
+                sg.setStartKey(key);
                 new Dijkstra(sg).perform();
                 key = getMin();
             } else {
