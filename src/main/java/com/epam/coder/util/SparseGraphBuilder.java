@@ -1,12 +1,9 @@
 package com.epam.coder.util;
 
-import com.epam.coder.model.SparseGraph;
-import com.epam.coder.model.Vertex;
-import com.epam.coder.model.MapGraph;
-import com.epam.coder.model.Node;
+import com.epam.coder.chinesepostman.partition.KernighanLin;
+import com.epam.coder.model.*;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SparseGraphBuilder {
 
@@ -21,6 +18,17 @@ public class SparseGraphBuilder {
                 .map(longNodeEntry -> longNodeEntry.getValue().getEdges())
                 .flatMap(Set::stream)
                 .forEach(sparseGraph::addEdge);
+        return sparseGraph;
+    }
+
+
+    public static SparseGraph fromVertexGroup(KernighanLin.VertexGroup group, SparseGraph originalGraph) {
+        SparseGraph sparseGraph = new SparseGraph();
+        group.forEach(sparseGraph::addVertex);
+        group.stream()
+             .map(vertex -> SparseGraph.findEdges(vertex, sparseGraph))
+             .flatMap(List::stream)
+             .forEach(sparseGraph::addEdge);
         return sparseGraph;
     }
 }

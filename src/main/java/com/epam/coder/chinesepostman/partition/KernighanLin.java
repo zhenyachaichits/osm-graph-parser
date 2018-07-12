@@ -154,7 +154,9 @@ public class KernighanLin {
     b.remove(vb); b.add(va);
   }
   
-  
+  public List<VertexGroup> getGroups(){
+      return Arrays.asList(A, B);
+  }
 
   
 }

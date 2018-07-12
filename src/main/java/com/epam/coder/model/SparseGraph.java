@@ -1,6 +1,8 @@
 package com.epam.coder.model;
 
+import com.epam.coder.chinesepostman.partition.KernighanLin;
 import com.epam.coder.chinesepostman.partition.Pair;
+import com.epam.coder.util.SparseGraphBuilder;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -114,7 +116,6 @@ public class SparseGraph {
     }
 
     public Edge findEdge(Vertex v1, Vertex v2) {
-        Vertex vertex = vertexSet.get(v1.getKey());
         Edge edge = this.getAdj(v1.getKey()).stream()
                 .filter(item -> item.getEndPointId() == v2.getId())
                 .findFirst()
@@ -127,6 +128,13 @@ public class SparseGraph {
                 .findFirst()
                 .orElse(null);
         return edge;
+    }
+
+    public static List<Edge> findEdges(Vertex v1, SparseGraph graph) {
+        return graph.getNeighbors(v1)
+             .stream()
+             .map(vertex -> graph.findEdge(v1, vertex))
+             .collect(Collectors.toList());
     }
 
     public String getStartKey() {
@@ -176,5 +184,29 @@ public class SparseGraph {
                 .collect(Collectors.toSet());
         start.addAll(end);
         return new ArrayList<>(start);
+    }
+
+    public List<SparseGraph> split(int subgraphsCount) {
+        List<KernighanLin.VertexGroup> split = split(this);
+        List<SparseGraph> result;
+        do {
+            result = split.stream()
+                    .parallel()
+                    .map(this::split)
+                    .flatMap(List::stream)
+                    .map(group -> SparseGraphBuilder.fromVertexGroup(group, this))
+                    .collect(Collectors.toList());
+        } while (result.size() < subgraphsCount);
+        return result;
+    }
+
+    private List<KernighanLin.VertexGroup> split(KernighanLin.VertexGroup group) {
+        SparseGraph graph = SparseGraphBuilder.fromVertexGroup(group, this);
+        return split(graph);
+    }
+
+    private List<KernighanLin.VertexGroup> split(SparseGraph graph) {
+        KernighanLin k = KernighanLin.process(graph);
+        return k.getGroups();
     }
 }
