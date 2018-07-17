@@ -25,12 +25,9 @@ public class KernighanLin {
   
   final private VertexGroup A, B;
   final private VertexGroup unswappedA, unswappedB;
-  public VertexGroup getGroupA() { return A; }
-  public VertexGroup getGroupB() { return B; }
-  
+
   final private SparseGraph sparseGraph;
 
-  public SparseGraph getSparseGraph() { return sparseGraph; }
   final private int partitionSize;
   
   private KernighanLin(SparseGraph g) {

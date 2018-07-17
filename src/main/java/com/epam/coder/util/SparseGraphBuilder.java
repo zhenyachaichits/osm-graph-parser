@@ -26,7 +26,7 @@ public class SparseGraphBuilder {
         SparseGraph sparseGraph = new SparseGraph();
         group.forEach(sparseGraph::addVertex);
         group.stream()
-             .map(vertex -> SparseGraph.findEdges(vertex, sparseGraph))
+             .map(originalGraph::findEdges)
              .flatMap(List::stream)
              .forEach(sparseGraph::addEdge);
         return sparseGraph;

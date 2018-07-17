@@ -116,24 +116,17 @@ public class SparseGraph {
     }
 
     public Edge findEdge(Vertex v1, Vertex v2) {
-        Edge edge = this.getAdj(v1.getKey()).stream()
-                .filter(item -> item.getEndPointId() == v2.getId())
+        ArrayList<Edge> edges = this.getAdj(v1.getKey());
+         return edges.stream()
+                .filter(edge -> String.valueOf(edge.getEndPointId()).equals(v2.getKey()))
                 .findFirst()
-                .orElse(null);
-        if (edge != null ) {
-            return edge;
-        }
-        edge = this.getAdj(v2.getKey()).stream()
-                .filter(item -> item.getEndPointId() == v1.getId())
-                .findFirst()
-                .orElse(null);
-        return edge;
+                 .orElseGet(() -> findEdge(v2, v1));
     }
 
-    public static List<Edge> findEdges(Vertex v1, SparseGraph graph) {
-        return graph.getNeighbors(v1)
+    public List<Edge> findEdges(Vertex v1) {
+        return this.getNeighbors(v1)
              .stream()
-             .map(vertex -> graph.findEdge(v1, vertex))
+             .map(vertex -> this.findEdge(v1, vertex))
              .collect(Collectors.toList());
     }
 
@@ -190,7 +183,6 @@ public class SparseGraph {
         List<SparseGraph> result = split(this);
         do {
             result = result.stream()
-                    .parallel()
                     .map(this::split)
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
