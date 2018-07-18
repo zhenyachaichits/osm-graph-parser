@@ -11,10 +11,16 @@ public class Edge {
     private boolean active;
     private Map<String, String> tags = new HashMap<>();
 
+    public Edge(long startPointId, long endPointId) {
+        this.startPointId = startPointId;
+        this.endPointId = endPointId;
+    }
+
     public Edge(long startPoint, long endPointId, long distance) {
         this.startPointId = startPoint;
         this.endPointId = endPointId;
         this.distance = distance;
+        this.active = true;
     }
 
     public Edge(long startPoint, long endPointId, long distance, Map<String, String> tags) {
@@ -22,6 +28,7 @@ public class Edge {
         this.endPointId = endPointId;
         this.distance = distance;
         this.tags = tags;
+        this.active = true;
     }
 
 
