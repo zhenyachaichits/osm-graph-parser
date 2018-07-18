@@ -3,6 +3,8 @@ package com.epam.coder.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Math.*;
+
 public class MapGraph {
 
     /*
@@ -16,6 +18,10 @@ public class MapGraph {
         this.graph = new HashMap<>();
     }
 
+    public MapGraph(Map<Long, Node> graph) {
+        this.graph = graph;
+    }
+
     public void addNode(Node node) {
         graph.put(node.getId(), node);
     }
@@ -25,9 +31,16 @@ public class MapGraph {
         Node endNode = graph.get(endPointId);
 
         if (startNode != null && endNode != null) {
-            long distance = 0; // GoogleMapsUtils.measureDistance(new LatLng(startNode.getLatitude(), startNode.getLongitude()),new LatLng(endNode.getLatitude(), endNode.getLongitude()));
-
-            startNode.getEdges().add(new Edge(startPointId, endPointId, distance, tags));
+            long leftLimit = 1L;
+            long rightLimit = 10L;
+            double dis = 6371000 * acos(
+                    sin(startNode.getLatitude() * PI / 180) * sin(endNode.getLatitude() * PI / 180) +
+                    cos(startNode.getLatitude() * PI / 180) * cos(endNode.getLatitude() * PI / 180) *
+                            cos(startNode.getLongitude() * PI / 180 - endNode.getLongitude() * PI / 180  )
+            );
+            //long distance = GoogleMapsUtils.measureDistance(new LatLng(startNode.getLatitude(), startNode.getLongitude()),new LatLng(endNode.getLatitude(), endNode.getLongitude()));
+            //System.out.println("dis - " + dis + " Google dis - " + distance + " dif - " + abs(dis - distance));
+            startNode.getEdges().add(new Edge(startPointId, endPointId, round(dis), tags));
         }
     }
 
