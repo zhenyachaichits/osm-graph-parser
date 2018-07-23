@@ -44,9 +44,6 @@ public class KernighanLin {
     }
     unswappedA = new VertexGroup(A);
     unswappedB = new VertexGroup(B);
-    
-    System.out.println(A.size()+" "+B.size());
-    
     doAllSwaps();
   }
   

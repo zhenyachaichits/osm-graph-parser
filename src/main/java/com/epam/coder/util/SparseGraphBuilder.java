@@ -28,6 +28,7 @@ public class SparseGraphBuilder {
         group.stream()
              .map(originalGraph::findEdges)
              .flatMap(List::stream)
+             .filter(Objects::nonNull)
              .forEach(sparseGraph::addEdge);
         return sparseGraph;
     }
