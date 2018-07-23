@@ -58,7 +58,10 @@ public class SparseGraph {
 
     public void addEdge(Edge e) {
         edgeSet.add(e);
-        adj.get(String.valueOf(e.getStartPointId())).add(e);
+        ArrayList<Edge> edges = adj.get(String.valueOf(e.getStartPointId()));
+        if (edges != null ) {
+            edges.add(e);
+        }
         String first = String.valueOf(e.getStartPointId());
         String second = String.valueOf(e.getEndPointId());
 
