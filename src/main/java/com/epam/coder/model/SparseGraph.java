@@ -10,8 +10,9 @@ import java.util.stream.Collectors;
 public class SparseGraph {
 
     private final HashMap<String, ArrayList<Edge>> adj;
-    private final Set<Pair<Vertex>> neighbours;
+    private final HashMap<Vertex, List<Vertex>> neighbours;
     private HashMap<String, Vertex> vertexSet;
+    private HashMap<Pair<Vertex>, Edge> vertexToEdgeMapping;
     private ArrayList<Edge> edgeSet;
     private String startKey;
 
@@ -19,8 +20,9 @@ public class SparseGraph {
         adj = new HashMap<>();
         vertexSet = new HashMap<>();
         edgeSet = new ArrayList<>();
-        neighbours = new HashSet<>();
+        neighbours = new HashMap<>();
         startKey = null;
+        vertexToEdgeMapping = new HashMap<>();
     }
 
 
@@ -56,11 +58,31 @@ public class SparseGraph {
 
     public void addEdge(Edge e) {
         edgeSet.add(e);
-        adj.get(String.valueOf(e.getStartPointId())).add(e);
+        ArrayList<Edge> edges = adj.get(String.valueOf(e.getStartPointId()));
+        if (edges != null ) {
+            edges.add(e);
+        }
         String first = String.valueOf(e.getStartPointId());
         String second = String.valueOf(e.getEndPointId());
-        neighbours.add(new Pair<>(vertexSet.get(first), vertexSet.get(second)));
-        neighbours.add(new Pair<>(vertexSet.get(second), vertexSet.get(first)));
+
+        Vertex firstVertex = vertexSet.get(first);
+        List<Vertex> firstNeighbours = neighbours.get(firstVertex);
+        if (firstNeighbours == null) {
+            firstNeighbours = new ArrayList<>();
+        }
+        firstNeighbours.add(vertexSet.get(first));
+        neighbours.put(firstVertex, firstNeighbours);
+
+        Vertex secondVertex = vertexSet.get(second);
+        List<Vertex> secondNeighbours = neighbours.get(secondVertex);
+        if (secondNeighbours == null) {
+            secondNeighbours = new ArrayList<>();
+        }
+        secondNeighbours.add(vertexSet.get(first));
+        neighbours.put(secondVertex, secondNeighbours);
+
+        vertexToEdgeMapping.put(new Pair<>(vertexSet.get(second), vertexSet.get(first)), e);
+        vertexToEdgeMapping.put(new Pair<>(vertexSet.get(first), vertexSet.get(second)), e);
     }
 
     public Edge edgeAdj(String a, String b) {
@@ -122,22 +144,8 @@ public class SparseGraph {
     }
 
     public Edge findEdge(Vertex v1, Vertex v2) {
-        if (neighbours.contains(new Pair<>(v1, v2))) {
-            ArrayList<Edge> edges = this.getAdj(v1.getKey());
-            return edges.stream()
-                    .filter(edge -> String.valueOf(edge.getEndPointId()).equals(v2.getKey()))
-                    .findFirst()
-                    .orElseGet(() -> {
-                        this.getAdj(v2.getKey());
-                        return edges.stream()
-                                .filter(edge -> String.valueOf(edge.getEndPointId()).equals(v1.getKey()))
-                                .findFirst().orElse(null);
-                    });
-        } else {
-            return null;
-        }
+        return vertexToEdgeMapping.get(new Pair<>(v1, v2));
     }
-
 
 
     public List<Edge> findEdges(Vertex v1) {
@@ -179,11 +187,9 @@ public class SparseGraph {
     }
 
     public List<Vertex> getNeighbors(Vertex v) {
-        return neighbours.stream()
-               .filter(vertexPair -> vertexPair.first.getKey().equalsIgnoreCase(v.getKey()))
-               .map(vertexPair -> vertexPair.second)
-               .collect(Collectors.toList());
+        return neighbours.get(v);
     }
+
 
     public List<SparseGraph> split(int subgraphsCount) {
         List<SparseGraph> result = split(this);
