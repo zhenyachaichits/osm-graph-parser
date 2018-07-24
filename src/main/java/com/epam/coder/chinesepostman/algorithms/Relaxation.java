@@ -23,14 +23,6 @@ public abstract class Relaxation {
         }
     }
 
-    public void printOut() {
-        for (Vertex v : sg.getVertexSet()) {
-            if (v.distance != Integer.MAX_VALUE) {
-                printOutVisit(v);
-                System.out.println(v.distance);
-            }
-        }
-    }
 
     void printOutVisit(Vertex v) {
         if (v.father == null) {

@@ -41,7 +41,7 @@ public class Greedy extends CPP {
             Edge edgeMax = null;
             for (Edge e : sg.getAdj(key)) {
                 if (e.isActive()) {
-                    Vertex v = sg.getVertex(String.valueOf(e.getEndPointId()));
+                    Vertex v = sg.getVertex(String.valueOf(e.getStartPointId()));
                     if (max < v.heuristic) {
                         max = v.heuristic;
                         edgeMax = e;
@@ -100,7 +100,7 @@ public class Greedy extends CPP {
     }
 
     private void pathVisit(Vertex v) {
-        if (v.father != null) {
+        if (v!= null && v.father != null) {
             pathVisit(sg.getVertex(v.father));
             output.add(v.getKey());
             sg.decreaseDegree(sg.edgeAdj(v.father, v.getKey()));

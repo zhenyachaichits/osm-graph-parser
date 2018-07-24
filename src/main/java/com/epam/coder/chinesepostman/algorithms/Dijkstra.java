@@ -37,8 +37,10 @@ public class Dijkstra extends Relaxation {
             if (u.distance == sg.getVertex(u.getKey()).distance) {
                 for (Edge e : sg.getAdj(u.getKey())) {
                     v = sg.getVertex(String.valueOf(e.getEndPointId()));
-                    relax(u, v, e);
-                    printOutVisit(v);
+                    if (v != null) {
+                        relax(u, v, e);
+                        printOutVisit(v);
+                    }
                 }
             }
         }

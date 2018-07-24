@@ -58,10 +58,14 @@ public class SparseGraph {
 
     public void addEdge(Edge e) {
         edgeSet.add(e);
-        ArrayList<Edge> edges = adj.get(String.valueOf(e.getStartPointId()));
-        if (edges != null ) {
+        String key = String.valueOf(e.getStartPointId());
+        ArrayList<Edge> edges = adj.get(key);
+        if (edges != null) {
             edges.add(e);
+        } else {
+            edges = new ArrayList<>();
         }
+        adj.put(key, edges);
         String first = String.valueOf(e.getStartPointId());
         String second = String.valueOf(e.getEndPointId());
 
@@ -193,12 +197,12 @@ public class SparseGraph {
 
     public List<SparseGraph> split(int subgraphsCount) {
         List<SparseGraph> result = split(this);
-        do {
+        while (result.size() < subgraphsCount) {
             result = result.stream()
                     .map(this::split)
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
-        } while (result.size() < subgraphsCount);
+        }
         return result;
     }
 
