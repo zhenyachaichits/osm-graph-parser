@@ -198,7 +198,7 @@ public class SparseGraph {
     public List<SparseGraph> split(int subgraphsCount) {
         List<SparseGraph> result = split(this);
         while (result.size() < subgraphsCount) {
-            result = result.stream()
+            result = result.parallelStream()
                     .map(this::split)
                     .flatMap(List::stream)
                     .collect(Collectors.toList());

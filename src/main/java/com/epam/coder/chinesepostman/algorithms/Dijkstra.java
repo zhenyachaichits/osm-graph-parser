@@ -39,7 +39,7 @@ public class Dijkstra extends Relaxation {
                     v = sg.getVertex(String.valueOf(e.getEndPointId()));
                     if (v != null) {
                         relax(u, v, e);
-                        printOutVisit(v);
+                        //printOutVisit(v);
                     }
                 }
             }

@@ -34,4 +34,7 @@ public abstract class CPP {
         System.out.println("Way cost" + sg.calculateWayCost(output));
     }
 
+    public ArrayList<String> getOutput() {
+        return output;
+    }
 }
