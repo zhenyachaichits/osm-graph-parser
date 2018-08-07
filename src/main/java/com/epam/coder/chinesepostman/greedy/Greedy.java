@@ -41,7 +41,7 @@ public class Greedy extends CPP {
             Edge edgeMax = null;
             for (Edge e : sg.getAdj(key)) {
                 if (e.isActive()) {
-                    Vertex v = sg.getVertex(String.valueOf(e.getStartPointId()));
+                    Vertex v = sg.getVertex(String.valueOf(e.getEndPointId()));
                     if (max < v.heuristic) {
                         max = v.heuristic;
                         edgeMax = e;
