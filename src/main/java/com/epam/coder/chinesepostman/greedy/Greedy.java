@@ -36,6 +36,9 @@ public class Greedy extends CPP {
         boolean stop = false;
         String key = startKey;
         while (!stop) {
+            if (output.size() > 1 && key.equals(output.get(output.size() - 1))) {
+                return;
+            }
             output.add(key);
             int max = 0;
             Edge edgeMax = null;
@@ -102,6 +105,9 @@ public class Greedy extends CPP {
     private void pathVisit(Vertex v) {
         if (v!= null && v.father != null) {
             pathVisit(sg.getVertex(v.father));
+            if (output.size() > 1 && v.getKey().equals(output.get(output.size() - 1))) {
+                return;
+            }
             output.add(v.getKey());
             sg.decreaseDegree(sg.edgeAdj(v.father, v.getKey()));
             sg.invalidate(v.father, v.getKey());
